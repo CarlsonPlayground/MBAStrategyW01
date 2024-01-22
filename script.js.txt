@@ -1,0 +1,75 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const gameData = {
+        questions: {
+            start: {
+                text: "Define Your Market",
+                options: [
+                    { text: "Specific Group", next: "nicheMarketFocus" },
+                    { text: "Wide Audience", next: "broadMarketApproach" }
+                ]
+            },
+            nicheMarketFocus: {
+                text: "Is cost the main driver for your customers?",
+                options: [
+                    { text: "Yes", result: "Focused Low-Cost Strategy" },
+                    { text: "No", next: "differentiationNicheMarket" }
+                ]
+            },
+            differentiationNicheMarket: {
+                text: "Are unique, high-quality offerings your strength?",
+                options: [
+                    { text: "Yes", result: "Focused Differentiation Strategy" },
+                    { text: "Somewhat", result: "Best-Cost Provider Strategy with a niche focus" }
+                ]
+            },
+            broadMarketApproach: {
+                text: "Are you competing primarily on price?",
+                options: [
+                    { text: "Yes", result: "Low-Cost Provider Strategy" },
+                    { text: "No", next: "differentiationBroadMarket" }
+                ]
+            },
+            differentiationBroadMarket: {
+                text: "Do you offer unique features that justify a higher price?",
+                options: [
+                    { text: "Yes", result: "Broad Differentiation Strategy" },
+                    { text: "No", result: "Best-Cost Provider Strategy appealing to a broader audience" }
+                ]
+            }
+        },
+        currentQuestion: 'start'
+    };
+
+    const questionSection = document.getElementById('question-section');
+    const resultSection = document.getElementById('result-section');
+
+    function displayQuestion() {
+        const question = gameData.questions[gameData.currentQuestion];
+        questionSection.innerHTML = `<p class="mb-4">${question.text}</p>`;
+
+        question.options.forEach(option => {
+            const button = document.createElement('button');
+            button.textContent = option.text;
+            button.className = 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2 mb-2';
+            button.onclick = () => handleChoice(option);
+            questionSection.appendChild(button);
+        });
+    }
+
+    function handleChoice(option) {
+        if (option.next) {
+            gameData.currentQuestion = option.next;
+            displayQuestion();
+        } else {
+            displayResult(option.result);
+        }
+    }
+
+    function displayResult(result) {
+        questionSection.innerHTML = '';
+        resultSection.innerHTML = `<p class="mb-4">${result}</p>`;
+        resultSection.classList.remove('hidden');
+    }
+
+    displayQuestion();
+});
